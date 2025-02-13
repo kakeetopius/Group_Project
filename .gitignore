@@ -1,0 +1,25 @@
+# Ignore compiled Java class files
+*.class
+
+# Ignore package files
+*.jar
+*.war
+*.ear
+
+# Ignore build directories
+bin/
+target/
+out/
+
+# Ignore IDE and editor-specific files
+.idea/
+*.iml
+*.log
+.vscode/
+*.swp
+.DS_Store
+
+# Ignore Maven and Gradle files
+.mvn/
+.gradle/
+build/
