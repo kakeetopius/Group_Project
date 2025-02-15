@@ -1,7 +1,7 @@
 import java.sql.*;
 
 public class CourseDAO extends DBCon{
-    Connection con = super.getConnection();
+    private Connection con = super.getConnection();
 
     public int addCourse(Course course) {
         String query = "INSERT INTO course(coursename,credit) VALUES(?,?)";

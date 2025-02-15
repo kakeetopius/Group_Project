@@ -1,7 +1,7 @@
 import java.sql.*;
 
 public class PersonDAO extends  DBCon{
-    Connection con = super.getConnection();
+    protected Connection con = super.getConnection();
 
     public Person getPersonByEmail(String email){
         Person person = null;
