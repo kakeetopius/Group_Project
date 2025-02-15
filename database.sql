@@ -33,3 +33,15 @@ CREATE TABLE Enrollment (
     stdid INT NOT NULL, 
     grade INT
 );
+
+ALTER TABLE Course 
+ADD CONSTRAINT fkey_lec_id FOREIGN KEY(lecid) 
+REFERENCES Lecturer(lecid);
+
+ALTER TABLE Enrollment
+ADD CONSTRAINT fkey_course_id FOREIGN KEY(courseid)
+REFERENCES Course(courseid);
+
+ALTER TABLE Enrollment
+ADD CONSTRAINT fkey_std_id FOREIGN KEY(stdid)
+REFERENCES Student(stdid);
