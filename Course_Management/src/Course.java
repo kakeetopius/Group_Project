@@ -10,7 +10,7 @@ public class Course {
     }
 
     public void setCourseid(int courseid) {this.courseid = courseid;}
-    public int getCourseid() {return courseid;}
+    public int getCourseid() {return this.courseid;}
 
     public void setCredit(int credit) {this.credit = credit;}
     public int getCredit() {return credit;}
