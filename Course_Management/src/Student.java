@@ -4,8 +4,9 @@ public class Student extends Person{
     private int stdid;
     private ArrayList<Course> courses = new ArrayList<>();
 
-    public Student(String fname, String lname, String gender) {
-        super(fname, lname, gender);
+
+    public Student(String fname, String lname, String gender, String email) {
+        super(fname, lname, gender, email);
     }
 
     public void setStdid(int stdid) {this.stdid = stdid;}
@@ -13,7 +14,6 @@ public class Student extends Person{
 
     public void addCourse(Course course) {courses.add(course);}
     public ArrayList<Course> getCourses() {return courses;}
-
 
     @Override
     public void displayDetails() {

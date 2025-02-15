@@ -5,11 +5,13 @@ public abstract class Person {
     private String phone;
     private String dob;
     private String gender;
+    private String password;
 
-    public Person(String fname, String lname, String gender) {
+    public Person(String fname, String lname, String gender, String email) {
         this.fname = fname;
         this.lname = lname;
         this.gender = gender;
+        this.email = email;
     }
 
     public void setfname(String fname) {this.fname = fname;}
@@ -29,6 +31,9 @@ public abstract class Person {
 
     public void setdob(String dob) {this.dob = dob;}
     public String getdob() {return this.dob;}
+
+    public void setPassword(String password) {this.password = password;}
+    public String getPassword() {return this.password;}
 
     //abstract method to display details
     public abstract void displayDetails();
