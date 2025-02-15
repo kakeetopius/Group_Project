@@ -1,8 +1,8 @@
 public class Lecturer extends Person {
     private int lecid;
-    private int courseid = 0;
+    private Course course;
 
-    public Lecturer(String fname, String lname, char gender) {
+    public Lecturer(String fname, String lname, String gender) {
         super(fname, lname, gender);
     }
 
@@ -10,19 +10,20 @@ public class Lecturer extends Person {
     public void setLecid(int lecid) { this.lecid = lecid; }
     public int getLecid() { return lecid; }
 
-    public void setCourseid(int courseid) { this.courseid = courseid; }
-    public int getCourseid() { return courseid; }
+    public void setCourse(Course course) { this.course = course; }
+    public Course getCourse() { return course; }
 
 
     @Override
     public void displayDetails() {
         System.out.println("Lecturer ID: " + getLecid());
         System.out.println("Name: " + super.getfname() + " " + super.getlname());
-        if (this.courseid == 0) {
-            System.out.println("Course taught: None");
+        if (getCourse() != null) {
+            System.out.println("Course Teaching: " + course.getCoursename());
         }
         else {
-            //get course name by id and display
+            System.out.println("Course Teaching: None");
         }
+
     }
 }

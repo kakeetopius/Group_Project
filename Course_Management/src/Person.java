@@ -4,9 +4,9 @@ public abstract class Person {
     private String email;
     private String phone;
     private String dob;
-    private char gender;
+    private String gender;
 
-    public Person(String fname, String lname, char gender) {
+    public Person(String fname, String lname, String gender) {
         this.fname = fname;
         this.lname = lname;
         this.gender = gender;
@@ -18,8 +18,8 @@ public abstract class Person {
     public void setlname(String lname) {this.lname = lname;}
     public String getlname() {return this.lname;}
 
-    public void setGender(char gender) {this.gender = gender;}
-    public char getGender() {return this.gender;}
+    public void setGender(String gender) {this.gender = gender;}
+    public String getGender() {return this.gender;}
 
     public void setemail(String email) {this.email = email;}
     public String getemail() {return this.email;}
