@@ -1,3 +1,9 @@
+/*
+For establishing
+a connection with database.
+ */
+
+
 import java.sql.*;
 
 public class DBCon {

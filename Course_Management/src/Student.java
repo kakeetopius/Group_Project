@@ -1,8 +1,11 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Student extends Person{
     private int stdid;
-    private ArrayList<Course> courses = new ArrayList<>();
+    private ArrayList<Course> courses;
+    private Map<String, Integer> grades;
 
 
     public Student(String fname, String lname, String gender, String email) {
@@ -14,6 +17,9 @@ public class Student extends Person{
 
     public void addCourse(Course course) {courses.add(course);}
     public ArrayList<Course> getCourses() {return courses;}
+
+    public void setGrades(Map<String,Integer> grades) {this.grades = grades;}
+    public Map<String, Integer> getGrades() {return grades;}
 
     @Override
     public void displayDetails() {

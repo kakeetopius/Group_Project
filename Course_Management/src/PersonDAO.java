@@ -1,3 +1,10 @@
+/*
+interacts with the student
+and lecturer table based on
+email plus also updating email and
+password.
+ */
+
 import java.sql.*;
 
 public class PersonDAO extends  DBCon{
@@ -78,13 +85,13 @@ public class PersonDAO extends  DBCon{
             }
 
             int affected_rows = stmt.executeUpdate();
-            if (affected_rows > 0){
+            if (affected_rows == 1){
                 System.out.println("Successfully updated password");
             }
             else {
                 System.out.println("Failed to update password");
             }
-            return affected_rows;
+            return 0;
         }
         catch (SQLException e){
             System.out.println("Error updating password");
@@ -111,13 +118,13 @@ public class PersonDAO extends  DBCon{
             }
 
             int affected_rows = stmt.executeUpdate();
-            if (affected_rows > 0){
+            if (affected_rows == 1){
                 System.out.println("Successfully updated email");
             }
             else {
                 System.out.println("Failed to update email");
             }
-            return affected_rows;
+            return 0;
         }
         catch (SQLException e){
             System.out.println("Error updating email");

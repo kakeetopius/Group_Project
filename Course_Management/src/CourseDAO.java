@@ -11,13 +11,14 @@ public class CourseDAO extends DBCon{
             stmt.setInt(2, course.getCredit());
             int affected_rows = stmt.executeUpdate();
 
-            if (affected_rows > 0) {
+            if (affected_rows == 1) {
                 System.out.println("Course Added Successfully");
+                return 0;
             }
             else {
                 System.out.println("Could not add course");
+                return -1;
             }
-            return affected_rows;
         }
         catch (SQLException e) {
             System.out.println("Error In seting Course: " + e.getMessage());
@@ -50,25 +51,48 @@ public class CourseDAO extends DBCon{
         return course;
     }
 
+    public Course getCoursebyName(String coursename) {
+        String query = "SELECT * FROM course WHERE coursename = ?";
+        Course course = null;
+        try {
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.setString(1,coursename);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                int courseid = rs.getInt("courseid");
+                int credit = rs.getInt("credit");
+                course = new Course(coursename,credit);
+                course.setCourseid(courseid);
+            }
+            else {
+                System.out.println("Course Not Found");
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("Error In getting Course: " + e.getMessage());
+        }
+        return course;
+    }
+
     public int deleteCourseByID(int courseid) {
         String query = "DELETE FROM course WHERE courseid = ?";
         try {
             PreparedStatement stmt = con.prepareStatement(query);
             stmt.setInt(1, courseid);
             int deleted_rows = stmt.executeUpdate();
-            if (deleted_rows > 0) {
+            if (deleted_rows == 1) {
                 System.out.println("Course Deleted Successfully");
+                return 0;
             }
             else {
                 System.out.println("Could not delete course");
+                return -1;
             }
-            return deleted_rows;
         }
         catch (SQLException e) {
             System.out.println("Error In deleting Course: " + e.getMessage());
             return -1;
         }
-
     }
 }
 

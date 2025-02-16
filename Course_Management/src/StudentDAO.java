@@ -1,3 +1,10 @@
+/*
+to deal with
+interacting student
+table in the database.
+ */
+
+
 import java.sql.*;
 
 public class StudentDAO extends PersonDAO {

@@ -1,10 +1,15 @@
+/*
+to deal with
+the Lecturer table
+in the database.
+ */
+
 import java.sql.*;
 
 public class LecturerDAO extends PersonDAO {
 
     public int addLecturer(Lecturer lec){
         String query = "INSERT INTO lecturer(fname,lname,gender,email,dept) VALUES(?,?,?,?,?)";
-        int affectedRows = 0;
 
         try {
             PreparedStatement stmt = super.con.prepareStatement(query);
@@ -15,16 +20,20 @@ public class LecturerDAO extends PersonDAO {
             stmt.setString(4,lec.getemail());
             stmt.setString(5,lec.getDept());
 
-            affectedRows= stmt.executeUpdate();
-            if (affectedRows > 0) {
+            int affectedRows= stmt.executeUpdate();
+            if (affectedRows == 1) {
                 System.out.println("Successfully added lecturer: " + lec.getfname());
+                return 0;
+            }
+            else {
+                System.out.println("Failed to add lecturer: " + lec.getfname());
+                return -1;
             }
         }
         catch(SQLException e){
             System.out.println("Error adding Lecturer: " + e.getMessage());
+            return -1;
         }
-
-        return affectedRows;
     }
 
     public Lecturer getLecturerByID(int id){
@@ -68,13 +77,14 @@ public class LecturerDAO extends PersonDAO {
             PreparedStatement stmt = con.prepareStatement(query);
             stmt.setInt(1,lecid);
             int affected_rows = stmt.executeUpdate();
-            if (affected_rows > 0){
+            if (affected_rows == 1){
                 System.out.println("Lecturer successfully deleted");
+                return 0;
             }
             else {
                 System.out.println("Lecturer not found. Could not delete");
+                return -1;
             }
-            return affected_rows;
         }
         catch (SQLException e){
             System.out.println("Error deleting Lecturer");
