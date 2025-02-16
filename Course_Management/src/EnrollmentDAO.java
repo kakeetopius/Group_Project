@@ -90,6 +90,7 @@ public class EnrollmentDAO extends DBCon{
 
     //adds courses student has enrolled to from the database to student object.
     public void getCoursesForStudent(Student student) {
+        ArrayList<Course> courses = new ArrayList<>();
         int stdid = student.getStdid();
         String query = "SELECT courseid FROM course NATURAL JOIN enrollment where stdid=?";
         try{
@@ -98,12 +99,13 @@ public class EnrollmentDAO extends DBCon{
             ResultSet rs = stmt.executeQuery();
             while(rs.next()) {
                 int courseid = rs.getInt("courseid");
-                student.addCourse(courseDAO.getCoursebyId(courseid));  //get course id then get course object and add it to Student object course array
+                courses.add(courseDAO.getCoursebyId(courseid));
             }
         }
         catch (SQLException e) {
             System.out.println("Error setting courses for student :" + e.getMessage());
         }
+        student.setCourses(courses);
     }
 
     public void getCourseForLecture(Lecturer lec) {
