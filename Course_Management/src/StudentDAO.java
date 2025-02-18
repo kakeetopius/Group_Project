@@ -9,55 +9,40 @@ import java.sql.*;
 
 public class StudentDAO extends PersonDAO {
 
-    public int addStudent(Student student){
-        String query = "INSERT INTO student(fname,lname,gender,email) VALUES(?,?,?,?)";
-        int affectedRows = 0;
+    public int addStudent(Student student) {
+        String query = "INSERT INTO student(fname,lname,gender,email) VALUES(" + student.getfname() + "," + student.getlname() + "," + student.getGender() + "," + student.getemail() + ")";
+        int status = super.insertData(query);
 
-        try {
-            PreparedStatement stmt = super.con.prepareStatement(query);
-
-            stmt.setString(1,student.getfname());
-            stmt.setString(2,student.getlname());
-            stmt.setString(3,student.getGender());
-            stmt.setString(4,student.getemail());
-
-            affectedRows= stmt.executeUpdate();
+        if (status == 0) {
+            System.out.println("Student added successfully");
+        } else {
+            System.out.println("failed to add student");
         }
-        catch(SQLException e){
-            System.out.println("Error adding student: " + e.getMessage());
-        }
-
-        return affectedRows;
+        return status;
     }
 
-    public Student getStudentByID(int id){
+    public Student getStudentByID(int id) {
         Student student = null;
-        String query = "SELECT * FROM student WHERE stdid = ?";
+        String query = "SELECT * FROM student WHERE stdid = " + id;
 
         try {
-            PreparedStatement stmt = super.con.prepareStatement(query);
-
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-
+            ResultSet rs = super.getData(query);
             //checking if there is a result
-            if(rs.next()) {
-                int stdid = rs.getInt(1);
-                String fname = rs.getString(2);
-                String lname = rs.getString(3);
-                String email = rs.getString(4);
-                String gender = rs.getString(8);
-                String password = rs.getString(9);
+            if (rs.next()) {
+                int stdid = rs.getInt("stdid");
+                String fname = rs.getString("fname");
+                String lname = rs.getString("lname");
+                String email = rs.getString("email");
+                String gender = rs.getString("gender");
+                String password = rs.getString("password");
 
-                student = new Student(fname,lname,gender,email);
+                student = new Student(fname, lname, gender, email);
                 student.setStdid(stdid);
                 student.setPassword(password);
-            }
-            else {
+            } else {
                 System.out.println("Student not found");
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             System.out.println("Error Getting Student: " + e.getMessage());
         }
 
@@ -65,24 +50,16 @@ public class StudentDAO extends PersonDAO {
     }
 
 
-    public int deleteStudentById(int studid)  {
-        String query = "DELETE FROM student WHERE stdid = ?";
-        try{
-            PreparedStatement stmt = con.prepareStatement(query);
-            stmt.setInt(1,studid);
-            int affected_rows = stmt.executeUpdate();
-            if (affected_rows > 0){
-                System.out.println("Student successfully deleted");
-            }
-            else {
-                System.out.println("Student not found. Could not delete");
-            }
-            return affected_rows;
+    public int deleteStudentById(int studid) {
+        String query = "DELETE FROM student WHERE stdid = " + studid;
+
+        int status = super.insertData(query);
+        if (status == 0) {
+            System.out.println("Student successfully deleted");
+        } else {
+            System.out.println("Student not found. Could not delete");
         }
-        catch (SQLException e){
-            System.out.println("Error deleting student");
-            return -1;
-        }
+        return status;
     }
 }
 

@@ -13,15 +13,47 @@ public class DBCon {
     private Connection con;
 
     public DBCon() {
+
+    }
+
+    protected Connection getConnection() {
+        Connection conn = null;
         try {
-            con = DriverManager.getConnection(url, user, password);
+            conn = DriverManager.getConnection(url, user, password);
         }
         catch(SQLException e) {
             System.out.println("Error Accessing Database");
         }
+        return conn;
     }
 
-    public Connection getConnection() {
-        return con;
+    protected int insertData(String query) {
+        Connection con = this.getConnection();
+
+        try {
+            Statement stmt = con.createStatement();
+            stmt.executeUpdate(query);
+            con.close();
+            return 0;
+        }
+        catch(SQLException e) {
+            System.out.println("Error Inserting data into the Database");
+            return -1;
+        }
+    }
+
+
+    protected ResultSet getData(String query) {
+        Connection con = this.getConnection();
+        ResultSet rs = null;
+
+        try {
+            Statement stmt = con.createStatement();
+            rs = stmt.executeQuery(query);
+            con.close();
+        } catch (SQLException e) {
+            System.out.println("Error Getting data from the Database " + e.getMessage());
+        }
+        return rs;
     }
 }

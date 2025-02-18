@@ -29,7 +29,7 @@ public class Student extends Person{
         System.out.println("Courses enrolled to: ");
 
 
-        if(!getCourses().isEmpty()) {
+        if(getCourses() != null) {
             for (Course course : getCourses()) {
                 System.out.println(course.getCoursename());
             }
