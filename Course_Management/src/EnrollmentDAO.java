@@ -18,11 +18,8 @@ public class EnrollmentDAO extends DBCon{
     private final StudentDAO studentDAO = new StudentDAO();
 
     //only adds to the database not to object.
-    public int addStudenttoCourse(Student student, Course course) {
-        String coursename = course.getCoursename();
-        int stdid = student.getStdid();
-        int courseid = course.getCourseid();
-        String query = String.format("INSERT INTO enrollment(courseid, stdid)VALUES(%d, %d)", courseid, stdid);
+    public int addStudenttoCourse(int studentID, int courseID) {
+        String query = String.format("INSERT INTO enrollment(courseid, stdid)VALUES(%d, %d)", courseID, studentID);
 
         int status = super.insertData(query);
 
@@ -36,11 +33,8 @@ public class EnrollmentDAO extends DBCon{
     }
 
     //only adds to the Database not lecturer object.
-    public int assignLectoCourse(Lecturer lec, Course course) {
-        int lecid = lec.getLecid();
-        int courseid = course.getCourseid();
-
-        String query = String.format("UPDATE enrollment SET lecid = %d, courseid = %d", lecid, courseid);
+    public int assignLectoCourse(int lecID, int courseID) {
+        String query = String.format("UPDATE course SET lecid = %d WHERE courseid = %d", lecID, courseID);
 
         int status = super.insertData(query);
         if (status == 0) {
@@ -53,12 +47,13 @@ public class EnrollmentDAO extends DBCon{
     }
 
     //adds courses student has enrolled to from the database to student object.
-    public void getCoursesForStudent(Student student) {
-        ArrayList<Course> courses = new ArrayList<>();
-        int stdid = student.getStdid();
+    public ArrayList<Course> getCoursesForStudent(int stdid) {
+        ArrayList<Course> courses = null;
+
         String query = String.format("SELECT courseid FROM course NATURAL JOIN enrollment WHERE stdid = %d", stdid);
         try{
             ResultSet rs = super.getData(query);
+            courses = new ArrayList<>();
             while(rs.next()) {
                 int courseid = rs.getInt("courseid");
                 courses.add(courseDAO.getCoursebyId(courseid));
@@ -67,17 +62,17 @@ public class EnrollmentDAO extends DBCon{
         catch (SQLException e) {
             System.out.println("Error setting courses for student :" + e.getMessage());
         }
-        student.setCourses(courses);
+        return courses;
     }
 
-    public void getCourseForLecture(Lecturer lec) {
-        int lecid = lec.getLecid();
+    public Course getCourseForLecturer(int lecid) {
+        Course course = null;
         String query = String.format("SELECT courseid FROM course WHERE lecid = %d", lecid);
         try {
             ResultSet rs = super.getData(query);
             if(rs.next()) {
                 int courseid = rs.getInt("courseid");
-                lec.setCourse(courseDAO.getCoursebyId(courseid)); //get course object and add to leccturer object
+                course = courseDAO.getCoursebyId(courseid);
             }
             else {
                 System.out.println("Could not find course for lecturer");
@@ -86,16 +81,17 @@ public class EnrollmentDAO extends DBCon{
         catch (SQLException e) {
             System.out.println("Error setting courses for lecturer :" + e.getMessage());
         }
+        return course;
     }
 
-    public void getStudentsinCourse(Course course) {
-        int courseid = course.getCourseid();
-        ArrayList<Student> students = new ArrayList<>();
+    public ArrayList<Student> getStudentsinCourse(int courseid) {
+        ArrayList<Student> students = null;
 
         String query = String.format("SELECT stdid FROM enrollment WHERE courseid = %d", courseid);
 
         try {
             ResultSet rs = super.getData(query);
+            students = new ArrayList<>();
             while(rs.next()) {
                 int stdid = rs.getInt("stdid");
                 Student student = studentDAO.getStudentByID(stdid); //get student object using id
@@ -105,14 +101,28 @@ public class EnrollmentDAO extends DBCon{
         catch (SQLException e) {
             System.out.println("Error setting students in Course :" + e.getMessage());
         }
-        course.setStudents(students);
+        return students;
     }
 
+    public Lecturer getLecforCourse (int courseid) {
+        String query = String.format("SELECT lecid FROM course WHERE courseid = %d", courseid);
+        Lecturer lec = null;
+
+        try {
+            ResultSet rs = super.getData(query);
+            if (rs.next()){
+                int lecid = rs.getInt("lecid");
+                lec = new LecturerDAO().getLecturerByID(lecid);
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("Error setting lectures in Course :" + e.getMessage());
+        }
+        return lec;
+    }
     //adds a mark to the database for the student
-    public int assignMarktoStudent(Student student, Course course, int marktoassign) {
-        int stdid = student.getStdid();
-        int courseid = course.getCourseid();
-        String query = String.format("UPDATE enrollment SET grade = %d WHERE courseid = %d AND stdid = %d", marktoassign, courseid, stdid);
+    public int assignMarktoStudent(int studentID, int courseID, int marktoassign) {
+        String query = String.format("UPDATE enrollment SET grade = %d WHERE courseid = %d AND stdid = %d", marktoassign, courseID, studentID);
 
         int status = super.insertData(query);
         if (status == 0) {
@@ -125,14 +135,13 @@ public class EnrollmentDAO extends DBCon{
     }
 
 
-    public void getMarksforStudent(Student student) {
-        Map<String, Integer> marks = new HashMap<>();
-
-        int stdid = student.getStdid();
+    public Map<String,Integer> getMarksforStudent(int stdid) {
+        Map<String, Integer> marks = null;
 
         String query = String.format("SELECT coursename, grade FROM enrollment NATURAL JOIN course WHERE stdid=%d",stdid);
         try {
             ResultSet rs = super.getData(query);
+            marks = new HashMap<>();
             while (rs.next()) {
                 String coursename = rs.getString("coursename");
                 int mark = rs.getInt("grade");
@@ -142,18 +151,17 @@ public class EnrollmentDAO extends DBCon{
         catch (SQLException e) {
             System.out.println("Error setting marks for student :" + e.getMessage());
         }
-
-        student.setGrades(marks); //add marks set to student object
+        return marks;
     }
 
 
-    public void getMarksforCourse(Course course) {
-        Map<String, Integer> courseMarks = new HashMap<>();
-        int courseid = course.getCourseid();
+    public Map<String, Integer> getMarksforCourse(int courseid) {
+        Map<String, Integer> courseMarks = null;
         String query = String.format("SELECT fname, lname, grade FROM enrollment NATURAL JOIN student WHERE courseid = %d",courseid);
 
         try {
             ResultSet rs = super.getData(query);
+            courseMarks = new HashMap<>();
             while (rs.next()) {
                 String fname = rs.getString("fname");
                 String lname = rs.getString("lname");
@@ -166,7 +174,7 @@ public class EnrollmentDAO extends DBCon{
             System.out.println("Error setting marks for course :" + e.getMessage());
         }
 
-        course.setGrades(courseMarks);
+        return courseMarks;
     }
 
     public boolean checkifCourseExists(String coursename) {

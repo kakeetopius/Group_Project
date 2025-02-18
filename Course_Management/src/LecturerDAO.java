@@ -20,9 +20,24 @@ public class LecturerDAO extends PersonDAO {
         return status;
     }
 
+    public int getLecturerID(String email) {
+        String query = String.format("SELECT lecid FROM lecturer WHERE email = '%s'", email);
+
+        ResultSet rs = super.getData(query);
+        try{
+            if (rs.next()){
+                int id = rs.getInt("lecid");
+                return id;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error getting studentId " + e.getMessage());
+        }
+        return -1;
+    }
+
     public Lecturer getLecturerByID(int id) {
         Lecturer lec = null;
-        String query = String.format("SELECT * FROM lecturer WHERE id=%d",id);
+        String query = String.format("SELECT * FROM lecturer WHERE lecid=%d",id);
 
         ResultSet rs = super.getData(query);
 
@@ -36,7 +51,6 @@ public class LecturerDAO extends PersonDAO {
                 String gender = rs.getString("gender");
                 String password = rs.getString("password");
                 lec = new Lecturer(fname, lname, gender, email, dept);
-                lec.setLecid(lecid);
                 lec.setPassword(password);
             } else {
                 System.out.println("Lecturer not found");

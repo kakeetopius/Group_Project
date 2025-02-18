@@ -15,6 +15,21 @@ public class CourseDAO extends DBCon{
         return status;
     }
 
+    public int getCourseID(String coursename) {
+        String query = String.format("SELECT courseid FROM course WHERE coursename = '%s'", coursename);
+
+        try {
+            ResultSet rs = super.getData(query);
+            if(rs.next()){
+                int id = rs.getInt("courseid");
+                return id;
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("Error getting course id " + e.getMessage());
+        }
+        return -1;
+    }
     public Course getCoursebyId(int courseid) {
         String query = String.format("SELECT * FROM course WHERE courseid=%d", courseid);
         Course course = null;
@@ -26,7 +41,6 @@ public class CourseDAO extends DBCon{
                 int credit = rs.getInt("credit");
                 int cid = rs.getInt("courseid");
                 course = new Course(coursename,credit);
-                course.setCourseid(cid);
             }
             else {
                 System.out.println("Course Not Found");
@@ -48,7 +62,6 @@ public class CourseDAO extends DBCon{
                 int courseid = rs.getInt("courseid");
                 int credit = rs.getInt("credit");
                 course = new Course(coursename,credit);
-                course.setCourseid(courseid);
             }
             else {
                 System.out.println("Course Not Found");

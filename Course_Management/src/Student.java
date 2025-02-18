@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class Student extends Person{
-    private int stdid;
+    private int stdid = -1;
     private ArrayList<Course> courses;
     private Map<String, Integer> grades;
 
@@ -11,14 +11,37 @@ public class Student extends Person{
         super(fname, lname, gender, email);
     }
 
-    public void setStdid(int stdid) {this.stdid = stdid;}
-    public int getStdid() {return stdid;}
+    private void setStdidFromDB() {
+        StudentDAO sdao = new StudentDAO();
+        this.stdid = sdao.getStudentID(super.getemail());
+    }
 
-    public void setCourses(ArrayList<Course> courses) {this.courses = courses;}
-    public ArrayList<Course> getCourses() {return courses;}
+    public int getStdid() {
+        if (stdid == -1) {
+            setStdidFromDB();
+        }
+        return stdid;
+    }
 
-    public void setGrades(Map<String,Integer> grades) {this.grades = grades;}
-    public Map<String, Integer> getGrades() {return grades;}
+    private void setCoursesfromDB() {
+        EnrollmentDAO edao = new EnrollmentDAO();
+        this.courses = edao.getCoursesForStudent(this.getStdid());
+    }
+
+    public ArrayList<Course> getCourses() {
+        setCoursesfromDB();
+        return courses;
+    }
+
+    private void setGradesfromDB() {
+        EnrollmentDAO edao = new EnrollmentDAO();
+        this.grades = edao.getMarksforStudent(this.getStdid());
+    }
+
+    public Map<String, Integer> getGrades() {
+        setGradesfromDB();
+        return grades;
+    }
 
     @Override
     public void displayDetails() {
@@ -39,4 +62,16 @@ public class Student extends Person{
         }
     }
 
+    public void displayMarks() {
+        if (getGrades() != null) {
+            System.out.println("Marks for: " + getfname() + " " + getlname());
+            System.out.println("Student ID: " + getStdid());
+            for (String coursename : grades.keySet()) {
+                System.out.println(coursename + ":" + grades.get(coursename));
+            }
+        }
+        else {
+            System.out.println("No Marks to display");
+        }
+    }
 }

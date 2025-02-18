@@ -10,7 +10,7 @@ import java.sql.*;
 public class StudentDAO extends PersonDAO {
 
     public int addStudent(Student student) {
-        String query = "INSERT INTO student(fname,lname,gender,email) VALUES(" + student.getfname() + "," + student.getlname() + "," + student.getGender() + "," + student.getemail() + ")";
+        String query = String.format("INSERT INTO student(fname,lname,gender,email) VALUES('%s','%s','%s','%s')",student.getfname(),student.getlname(),student.getGender(),student.getemail());
         int status = super.insertData(query);
 
         if (status == 0) {
@@ -19,6 +19,21 @@ public class StudentDAO extends PersonDAO {
             System.out.println("failed to add student");
         }
         return status;
+    }
+
+    public int getStudentID(String email) {
+        String query = String.format("SELECT stdid FROM student WHERE email = '%s'", email);
+
+        ResultSet rs = super.getData(query);
+        try{
+            if (rs.next()){
+                int id = rs.getInt("stdid");
+                return id;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error getting studentId " + e.getMessage());
+        }
+        return -1;
     }
 
     public Student getStudentByID(int id) {
@@ -37,7 +52,6 @@ public class StudentDAO extends PersonDAO {
                 String password = rs.getString("password");
 
                 student = new Student(fname, lname, gender, email);
-                student.setStdid(stdid);
                 student.setPassword(password);
             } else {
                 System.out.println("Student not found");

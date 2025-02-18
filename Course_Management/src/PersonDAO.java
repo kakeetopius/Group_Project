@@ -24,7 +24,6 @@ public class PersonDAO extends  DBCon{
                 String password = rs.getString("password");
                 Student student = new Student(fname,lname,gender,user_email);
                 student.setPassword(password);
-                student.setStdid(stdid);
                 return student;
             }
             else {
@@ -39,7 +38,6 @@ public class PersonDAO extends  DBCon{
 
                     Lecturer lecturer = new Lecturer(fname,lname,gender,user_email,dept);
                     lecturer.setPassword(password);
-                    lecturer.setLecid(lecid);
                     return lecturer;
                 }
                 else {
@@ -60,7 +58,7 @@ public class PersonDAO extends  DBCon{
             query = String.format("UPDATE student SET password = '%s' WHERE stdid = %d",new_password,((Student)person).getStdid());
         }
         else if (person instanceof Lecturer) {
-            query = String.format("UPDATE lecturer SET password = '%s' WHERE stdid = %d",new_password,((Lecturer)person).getLecid());
+            query = String.format("UPDATE lecturer SET password = '%s' WHERE stdid = %d",new_password,((Lecturer)person).getLecID());
         }
 
 
@@ -79,7 +77,7 @@ public class PersonDAO extends  DBCon{
         if (person instanceof Student) {
             query = String.format("UPDATE student SET email = '%s' WHERE stdid = %d",new_email,((Student)person).getStdid());
         } else if (person instanceof Lecturer) {
-            query = String.format("UPDATE student SET email = '%s' WHERE stdid = %d",new_email,((Lecturer)person).getLecid());
+            query = String.format("UPDATE student SET email = '%s' WHERE stdid = %d",new_email,((Lecturer)person).getLecID());
         }
 
         int status = super.insertData(query);

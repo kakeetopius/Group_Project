@@ -37,7 +37,7 @@ public class DBCon {
             return 0;
         }
         catch(SQLException e) {
-            System.out.println("Error Inserting data into the Database");
+            System.out.println("Error Inserting data into the Database" + e.getMessage());
             return -1;
         }
     }

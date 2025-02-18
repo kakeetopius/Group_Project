@@ -1,5 +1,5 @@
 public class Lecturer extends Person {
-    private int lecid;
+    private int lecid = -1;
     private Course course;
     private String dept;
 
@@ -11,16 +11,32 @@ public class Lecturer extends Person {
     public void setDept(String dept) {this.dept = dept;}
     public String getDept() {return this.dept;}
 
-    public void setLecid(int lecid) { this.lecid = lecid; }
-    public int getLecid() { return lecid; }
+    private void setLecidFromDB() {
+        LecturerDAO ldao = new LecturerDAO();
+        this.lecid = ldao.getLecturerID(super.getemail());
+    }
 
-    public void setCourse(Course course) { this.course = course; }
-    public Course getCourse() { return course; }
+    public int getLecID() {
+        if (lecid == -1) {
+            setLecidFromDB();
+        }
+        return this.lecid;
+    }
+
+    private void setCourseFromDB() {
+        EnrollmentDAO edao = new EnrollmentDAO();
+        this.course = edao.getCourseForLecturer(this.getLecID());
+    }
+
+    public Course getCourse() {
+        setCourseFromDB();
+        return this.course;
+    }
 
 
     @Override
     public void displayDetails() {
-        System.out.println("Lecturer ID: " + getLecid());
+        System.out.println("Lecturer ID: " + getLecID());
         System.out.println("Name: " + super.getfname() + " " + super.getlname());
         if (getCourse() != null) {
             System.out.println("Course Teaching: " + course.getCoursename());
