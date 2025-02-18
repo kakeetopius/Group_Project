@@ -32,14 +32,10 @@ public class StudentDAO extends PersonDAO {
 
     public Student getStudentByID(int id){
         Student student = null;
-        String query = "SELECT * FROM student WHERE stdid = ?";
+        String query = "SELECT * FROM student WHERE stdid = " + String.valueOf(id);
 
         try {
-            PreparedStatement stmt = super.con.prepareStatement(query);
-
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-
+            ResultSet rs = super.getData(query);
             //checking if there is a result
             if(rs.next()) {
                 int stdid = rs.getInt(1);
