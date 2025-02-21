@@ -15,11 +15,12 @@ public class DBCon {
     private Connection con;
 
     public DBCon() {
-
+        getCredentials();
     }
 
     protected Connection getConnection() {
         Connection conn = null;
+
         try {
             conn = DriverManager.getConnection(url, user, password);
         }
@@ -59,12 +60,13 @@ public class DBCon {
         return rs;
     }
 
-    private void getCredentials(String filename) {
-        StringBuilder sb = new StringBuilder();
-        File file = new File(filename);
+    private void getCredentials() {
+        StringBuilder sb = new StringBuilder();  //for building text from credential file.
+        File file = new File("credentials.txt");
 
         try {
             Scanner sc = new Scanner(file);
+            //getting text from file.
             while(sc.hasNext()) {
                 sb.append(sc.nextLine());
                 sb.append("\n");
@@ -74,14 +76,20 @@ public class DBCon {
             System.out.println(e.getMessage());
         }
 
-        String creds = sb.toString();
+        String textString = sb.toString(); //converting string builder text to string
 
-        String[] rows = creds.split("\n");
+        String[] rows = textString.split("\n");  //splits the text into an array of rows from file
+        String name = "";
+        String pass = "";
 
-        for (String row : rows) {
-            String[] values = row.split(":");
-            this.user = values[0];
-            this.password = values[1];
+        String[] credentials = new String[2]; //for username and password
+
+        for (int i = 0 ; i < rows.length; i++) {
+            String[] values = rows[i].split(":");  //separates value from label from each row
+            credentials[i] = values[1]; //extracts the value to initialise the credentials array
         }
+        this.user = credentials[0];
+        this.password = credentials[1];
     }
+
 }

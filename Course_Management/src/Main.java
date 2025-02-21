@@ -8,16 +8,32 @@ import java.io.*;
 
 public class Main{
     public static void main(String[] args) throws IOException {
-        Scanner sc = new Scanner(System.in);
-        FileWriter fw = new FileWriter("credentials.txt");
-        System.out.println("Enter database username: ");
-        String name = sc.nextLine();
-        System.out.println("Enter password: ");
-        String pass = sc.nextLine();
+        File creds = new File("credentials.txt");
 
-        String writing = "User:" + name + "\n" + "Password:" + pass + "\n";
+        if (!creds.exists()) {
+            setCredentials();
+        }
 
-        fw.write(writing);
-        fw.close();
     }
+
+
+    public static void setCredentials() {
+        Scanner sc = new Scanner(System.in);
+        try {
+            FileWriter fw = new FileWriter("credentials.txt");
+            System.out.println("Enter database username: ");
+            String name = sc.nextLine();
+            System.out.println("Enter password: ");
+            String pass = sc.nextLine();
+
+            String writing = "User:" + name + "\n" + "Password:" + pass + "\n";
+
+            fw.write(writing);
+            fw.close();
+        }
+        catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 }
