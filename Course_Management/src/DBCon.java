@@ -12,13 +12,17 @@ public class DBCon {
     final String url = "jdbc:postgresql://localhost:5432/course_mgmt";
     private String user = "";
     private String password = "";
-    private Connection con;
 
     public DBCon() {
+        File creds = new File("credentials.txt");
+
+        if (!creds.exists()) {
+            setCredentials();
+        }
         getCredentials();
     }
 
-    protected Connection getConnection() {
+    private Connection getConnection() {
         Connection conn = null;
 
         try {
@@ -44,7 +48,6 @@ public class DBCon {
             return -1;
         }
     }
-
 
     protected ResultSet getData(String query) {
         Connection con = this.getConnection();
@@ -90,6 +93,25 @@ public class DBCon {
         }
         this.user = credentials[0];
         this.password = credentials[1];
+    }
+
+    public static void setCredentials() {
+        Scanner sc = new Scanner(System.in);
+        try {
+            FileWriter fw = new FileWriter("credentials.txt");
+            System.out.println("Enter database username: ");
+            String name = sc.nextLine();
+            System.out.println("Enter password: ");
+            String pass = sc.nextLine();
+
+            String writing = "User:" + name + "\n" + "Password:" + pass + "\n";
+
+            fw.write(writing);
+            fw.close();
+        }
+        catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 }
