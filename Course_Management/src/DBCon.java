@@ -5,11 +5,13 @@ a connection with database.
 
 
 import java.sql.*;
+import java.io.*;
+import java.util.Scanner;
 
 public class DBCon {
     final String url = "jdbc:postgresql://localhost:5432/course_mgmt";
-    final String user = "postgres";
-    final String password = "kapila";
+    private String user = "";
+    private String password = "";
     private Connection con;
 
     public DBCon() {
@@ -55,5 +57,31 @@ public class DBCon {
             System.out.println("Error Getting data from the Database " + e.getMessage());
         }
         return rs;
+    }
+
+    private void getCredentials(String filename) {
+        StringBuilder sb = new StringBuilder();
+        File file = new File(filename);
+
+        try {
+            Scanner sc = new Scanner(file);
+            while(sc.hasNext()) {
+                sb.append(sc.nextLine());
+                sb.append("\n");
+            }
+        }
+        catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        String creds = sb.toString();
+
+        String[] rows = creds.split("\n");
+
+        for (String row : rows) {
+            String[] values = row.split(":");
+            this.user = values[0];
+            this.password = values[1];
+        }
     }
 }

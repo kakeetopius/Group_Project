@@ -23,3 +23,5 @@ out/
 .mvn/
 .gradle/
 build/
+
+Course_Management/credentials.txt
