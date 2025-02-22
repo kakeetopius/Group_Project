@@ -89,7 +89,7 @@ public class DBCon {
 
         for (int i = 0 ; i < rows.length; i++) {
             String[] values = rows[i].split(":");  //separates value from label from each row
-            credentials[i] = values[1]; //extracts the value to initialise the credentials array
+            credentials[i] = values[1].strip(); //extracts the value to initialise the credentials array
         }
         this.user = credentials[0];
         this.password = credentials[1];
