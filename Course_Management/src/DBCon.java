@@ -82,8 +82,6 @@ public class DBCon {
         String textString = sb.toString(); //converting string builder text to string
 
         String[] rows = textString.split("\n");  //splits the text into an array of rows from file
-        String name = "";
-        String pass = "";
 
         String[] credentials = new String[2]; //for username and password
 
