@@ -7,7 +7,6 @@ public abstract class Person {
     private String phone;
     private String dob;
     private String gender;
-    private String password;
 
     public Person(String fname, String lname, String gender, String email) {
         this.fname = fname;
@@ -33,9 +32,6 @@ public abstract class Person {
 
     public void setdob(String dob) {this.dob = dob;}
     public String getdob() {return this.dob;}
-
-    public void setPassword(String password) {this.password = password;}
-    public String getPassword() {return this.password;}
 
     public String getname() {
         return this.getfname() + " " + this.getlname();

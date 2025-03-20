@@ -28,10 +28,8 @@ public class PersonDAO extends DBCon {
                 String fname = rs.getString("fname");
                 String lname = rs.getString("lname");
                 String gender = rs.getString("gender");
-                String password = rs.getString("password");
                 //===============Creating a student object using details got from the database========
                 Student student = new Student(fname,lname,gender,user_email);
-                student.setPassword(password);
                 return student;
             }
             //====if the result set was empty, checking the lecturer table for the email========
@@ -42,11 +40,9 @@ public class PersonDAO extends DBCon {
                     String fname = rs1.getString("fname");
                     String lname = rs1.getString("lname");
                     String gender = rs1.getString("gender");
-                    String password = rs1.getString("password");
                     String dept = rs1.getString("dept");
                     //====Creating a lecturer object using the details got from the database===========
                     Lecturer lecturer = new Lecturer(fname,lname,gender,user_email,dept);
-                    lecturer.setPassword(password);
                     return lecturer;
                 }
                 else {

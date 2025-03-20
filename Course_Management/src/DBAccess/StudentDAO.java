@@ -77,10 +77,8 @@ public class StudentDAO extends PersonDAO {
                 String lname = rs.getString("lname");
                 String email = rs.getString("email");
                 String gender = rs.getString("gender");
-                String password = rs.getString("password");
                 //===Creating a student object===========
                 student = new Student(fname, lname, gender, email);
-                student.setPassword(password);
             } else {
                 System.out.println("Student not found");
             }

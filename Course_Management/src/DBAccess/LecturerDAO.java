@@ -19,9 +19,9 @@ public class LecturerDAO extends PersonDAO {
 
         int status = super.insertData(query);
         if (status == 0) {
-            System.out.println("BaseClasses.Lecturer added successfully");
+            System.out.println("Lecturer added successfully");
         } else {
-            System.out.println("Error: BaseClasses.Lecturer not added");
+            System.out.println("Lecturer not added");
         }
         return status;
     }
@@ -74,10 +74,8 @@ public class LecturerDAO extends PersonDAO {
                 String email = rs.getString("email");
                 String dept = rs.getString("dept");
                 String gender = rs.getString("gender");
-                String password = rs.getString("password");
                 //---Creating lecturer object----------
                 lec = new Lecturer(fname, lname, gender, email, dept);
-                lec.setPassword(password);
             } else {
                 System.out.println("Lecturer not found");
             }
